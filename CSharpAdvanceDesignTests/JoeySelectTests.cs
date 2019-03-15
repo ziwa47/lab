@@ -5,6 +5,7 @@ using NUnit.Framework;
 using NUnit.Framework.Internal;
 using System.Collections.Generic;
 using System.Linq;
+using Lab;
 
 namespace CSharpAdvanceDesignTests
 {
@@ -16,8 +17,7 @@ namespace CSharpAdvanceDesignTests
         {
             var urls = GetUrls();
 
-            var actual = JoeySelect(urls,
-                url => url.Replace("http://", "https://"));
+            var actual = urls.JoeySelect(url => url.Replace("http://", "https://"));
             var expected = new List<string>
             {
                 "https://tw.yahoo.com",
@@ -34,8 +34,7 @@ namespace CSharpAdvanceDesignTests
         {
             var urls = GetUrls();
 
-            var actual = JoeySelect(urls,
-                url => url.Replace("http://", "https://") + "/joey");
+            var actual = urls.JoeySelect(url => url.Replace("http://", "https://") + "/joey");
             var expected = new List<string>
             {
                 "https://tw.yahoo.com/joey",
@@ -63,7 +62,7 @@ namespace CSharpAdvanceDesignTests
                 "David-Chen",
             };
 
-            var actual = JoeySelect(employees, e => $"{e.FirstName}-{e.LastName}");
+            var actual = employees.JoeySelect(e => $"{e.FirstName}-{e.LastName}");
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
@@ -81,7 +80,7 @@ namespace CSharpAdvanceDesignTests
                 8,5,9
             };
 
-            var actual = JoeySelect(employees, e => $"{e.FirstName}{e.LastName}".Length);
+            var actual = employees.JoeySelect(e => $"{e.FirstName}{e.LastName}".Length);
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
@@ -101,7 +100,7 @@ namespace CSharpAdvanceDesignTests
                 "3.David-Chen",
             };
 
-            var actual = JoeySelect(employees, (e, i) => $"{i}.{e.FirstName}-{e.LastName}");
+            var actual = MyOwnLinq.JoeySelect(employees, (e, i) => $"{++i}.{e.FirstName}-{e.LastName}");
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
@@ -130,32 +129,6 @@ namespace CSharpAdvanceDesignTests
 
         //    return result;
         //}
-
-        private IEnumerable<TResult> JoeySelect<TSource, TResult>(IEnumerable<TSource> sources,
-            Func<TSource, TResult> selector)
-        {
-            var result = new List<TResult>();
-            foreach (var source in sources)
-            {
-                result.Add(selector(source));
-            }
-
-            return result;
-        }
-
-        private IEnumerable<TResult> JoeySelect<TSource, TResult>(IEnumerable<TSource> sources,
-            Func<TSource, int, TResult> selector)
-        {
-            //var result = new List<TResult>();
-            var index = 0;
-            foreach (var source in sources)
-            {
-                //result.Add(selector(source, ++index));
-                yield return selector(source, ++index);
-            }
-
-            //return result;
-        }
 
 
         //private IEnumerable<string> JoeySelectAppend(IEnumerable<string> urls, Func<string,string> selector)
