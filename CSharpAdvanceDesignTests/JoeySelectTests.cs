@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using ExpectedObjects;
 using Lab.Entities;
 using NUnit.Framework;
@@ -100,7 +101,7 @@ namespace CSharpAdvanceDesignTests
                 "3.David-Chen",
             };
 
-            var actual = MyOwnLinq.JoeySelect(employees, (e, i) => $"{++i}.{e.FirstName}-{e.LastName}");
+            var actual = employees.JoeySelect((e, i) => $"{++i}.{e.FirstName}-{e.LastName}");
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
@@ -152,7 +153,7 @@ namespace CSharpAdvanceDesignTests
             yield return "http://github.com";
         }
 
-        private static List<Employee> GetEmployees()
+        private static IEnumerable GetEmployees()
         {
             return new List<Employee>
             {

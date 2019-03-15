@@ -5,41 +5,53 @@ namespace Lab
 {
     public static class MyOwnLinq
     {
-        public static List<TSource> JoeyWhere<TSource>(this List<TSource> sources, Func<TSource, bool> predicate)
+        public static IEnumerable<TSource> JoeyWhere<TSource>(this IEnumerable<TSource> sources, Func<TSource, bool> predicate)
         {
-            var result = new List<TSource>();
-            foreach (var p in sources)
+
+            var souEnumerator = sources.GetEnumerator();
+            while (souEnumerator.MoveNext())
             {
-                if (predicate(p))
-                    result.Add(p);
+                var item = souEnumerator.Current;
+
+                if (predicate(item))
+                    yield return item;
             }
-            return result;
+            //var result = new List<TSource>();
+            //foreach (var p in sources)
+            //{
+            //    if (predicate(p))
+            //        yield return p;
+            //    //result.Add(p);
+            //}
+            //return result;
         }
-        public static List<TSource> JoeyWhere<TSource>(this List<TSource> sources, Func<TSource, int, bool> predicate)
+        public static IEnumerable<TSource> JoeyWhere<TSource>(this IEnumerable<TSource> sources, Func<TSource, int, bool> predicate)
         {
-            var result = new List<TSource>();
+            //var result = new List<TSource>();
             var index = 0;
             foreach (var p in sources)
             {
-                if (predicate(p,index++))
-                    result.Add(p);
+                if (predicate(p, index++))
+                    yield return p;
+                //result.Add(p);
             }
-            return result;
+            //return result;
         }
 
         public static IEnumerable<TResult> JoeySelect<TSource, TResult>(this IEnumerable<TSource> sources,
             Func<TSource, TResult> selector)
         {
-            var result = new List<TResult>();
+            //var result = new List<TResult>();
             foreach (var source in sources)
             {
-                result.Add(selector(source));
+                //result.Add(selector(source));
+                yield return selector(source);
             }
 
-            return result;
+            //return result;
         }
 
-        public static IEnumerable<TResult> JoeySelect<TSource, TResult>(IEnumerable<TSource> sources,
+        public static IEnumerable<TResult> JoeySelect<TSource, TResult>(this IEnumerable<TSource> sources,
             Func<TSource, int, TResult> selector)
         {
             //var result = new List<TResult>();
