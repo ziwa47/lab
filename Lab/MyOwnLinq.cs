@@ -75,9 +75,9 @@ namespace Lab
             {
                 var item = employeeEnumerator.Current;
                 if (i++ < takeCount)
-                {
                     yield return item;
-                }
+                else
+                    yield break;
             }
         }
 

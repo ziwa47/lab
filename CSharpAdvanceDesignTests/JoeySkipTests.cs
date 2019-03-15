@@ -1,9 +1,12 @@
 ﻿using ExpectedObjects;
+
+using Lab;
 using Lab.Entities;
+
 using NUnit.Framework;
+
 using System.Collections.Generic;
 using System.Linq;
-using Lab;
 
 namespace CSharpAdvanceDesignTests
 {
@@ -13,7 +16,7 @@ namespace CSharpAdvanceDesignTests
         [Test]
         public void skip_2_employees()
         {
-            var employees = (IEnumerable<Employee>) new List<Employee>
+            var employees = (IEnumerable<Employee>)new List<Employee>
             {
                 new Employee {FirstName = "Joey", LastName = "Chen"},
                 new Employee {FirstName = "Tom", LastName = "Li"},
@@ -37,14 +40,14 @@ namespace CSharpAdvanceDesignTests
         [Test]
         public void num_skip_3()
         {
-            var employees =  new List<int>
+            var employees = new[]
             {
                 10,20,30,40
             };
 
             var actual = employees.JoeySkip(3);
 
-            var expected = new List<int>
+            var expected = new[]
             {
                40
             };
