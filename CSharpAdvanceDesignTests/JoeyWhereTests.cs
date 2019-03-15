@@ -25,7 +25,7 @@ namespace CSharpAdvanceDesignTests
                 new Product {Id = 8, Cost = 18, Price = 780, Supplier = "Yahoo"}
             };
 
-            var actual = JoeyWhere(products,
+            var actual = JoeyWhereDuplicate(products,
                 p => p.Price > 200 && p.Price < 500);
 
             var expected = new List<Product>
@@ -53,8 +53,9 @@ namespace CSharpAdvanceDesignTests
                 new Product {Id = 8, Cost = 18, Price = 780, Supplier = "Yahoo"}
             };
 
-            //var actual = JoeyWhereFilterCost(products);
-            var actual = JoeyWhere(products, p => p.Price > 200 && p.Price < 500 & p.Cost > 30);
+            //var actual = JoeyWhereFilterCost(sources);
+            var actual = JoeyWhereDuplicate(products, 
+                p => p.Price > 200 && p.Price < 500 & p.Cost > 30);
 
             var expected = new List<Product>
             {
@@ -66,10 +67,19 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        //private List<Product> JoeyWhereFilterCost(List<Product> products)
+
+        public void find_short_names()
+        {
+            var names = new List<string> {"Joey", "Cash", "William", "Sam", "Brian", "Jessica"};
+            var actual = JoeyWhereDuplicate(names, n => n.Length < 5);
+            var expected = new[] {"Joey", "Cash", "Sam"};
+            expected.ToExpectedObject().ShouldMatch(actual);
+        }
+
+        //private List<Product> JoeyWhereFilterCost(List<Product> sources)
         //{
         //    var result = new List<Product>();
-        //    foreach (var product in products)
+        //    foreach (var product in sources)
         //    {
         //        if (product.Price > 200 & product.Price < 500 && product.Cost > 30)
         //            result.Add(product);
@@ -78,10 +88,21 @@ namespace CSharpAdvanceDesignTests
         //    return result;
         //}
 
-        private List<Product> JoeyWhere(List<Product> products, Func<Product, bool> predicate)
+        private List<string> JoeyWhereDuplicate(List<string> names, Func<string, bool> predicate)
         {
-            var result = new List<Product>();
-            foreach (var p in products)
+            var result = new List<string>();
+            foreach (var n in names)
+            {
+                if (predicate(n))
+                    result.Add(n);
+            }
+            return result;
+        }
+
+        private List<TSource> JoeyWhereDuplicate<TSource>(List<TSource> sources, Func<TSource, bool> predicate)
+        {
+            var result = new List<TSource>();
+            foreach (var p in sources)
             {
                 if (predicate(p))
                     result.Add(p);
