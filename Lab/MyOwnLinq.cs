@@ -81,7 +81,7 @@ namespace Lab
             }
         }
 
-        public static IEnumerable<TSource> JoeySkip<TSource>(IEnumerable<TSource> employees, int skipCount)
+        public static IEnumerable<TSource> JoeySkip<TSource>(this IEnumerable<TSource> employees, int skipCount)
         {
             var employeesEnumerator = employees.GetEnumerator();
             var count = 0;
