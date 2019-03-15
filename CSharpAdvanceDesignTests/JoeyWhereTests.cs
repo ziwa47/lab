@@ -1,9 +1,9 @@
-﻿using System;
-using Lab.Entities;
+﻿using Lab.Entities;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 using System.Collections.Generic;
 using ExpectedObjects;
+using Lab;
 
 namespace CSharpAdvanceDesignTests
 {
@@ -25,8 +25,7 @@ namespace CSharpAdvanceDesignTests
                 new Product {Id = 8, Cost = 18, Price = 780, Supplier = "Yahoo"}
             };
 
-            var actual = JoeyWhereDuplicate(products,
-                p => p.Price > 200 && p.Price < 500);
+            var actual = products.JoeyWhere(p => p.Price > 200 && p.Price < 500);
 
             var expected = new List<Product>
             {
@@ -54,8 +53,9 @@ namespace CSharpAdvanceDesignTests
             };
 
             //var actual = JoeyWhereFilterCost(sources);
-            var actual = JoeyWhereDuplicate(products, 
-                p => p.Price > 200 && p.Price < 500 & p.Cost > 30);
+            //var actual = MyOwnLinq.JoeyWhere(products, 
+            //    p => p.Price > 200 && p.Price < 500 & p.Cost > 30);
+            var actual = products.JoeyWhere(p => p.Price > 200 && p.Price < 500 & p.Cost > 30);
 
             var expected = new List<Product>
             {
@@ -67,11 +67,11 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-
+        [Test]
         public void find_short_names()
         {
             var names = new List<string> {"Joey", "Cash", "William", "Sam", "Brian", "Jessica"};
-            var actual = JoeyWhereDuplicate(names, n => n.Length < 5);
+            var actual = names.JoeyWhere(n => n.Length < 5);
             var expected = new[] {"Joey", "Cash", "Sam"};
             expected.ToExpectedObject().ShouldMatch(actual);
         }
@@ -88,26 +88,15 @@ namespace CSharpAdvanceDesignTests
         //    return result;
         //}
 
-        private List<string> JoeyWhereDuplicate(List<string> names, Func<string, bool> predicate)
-        {
-            var result = new List<string>();
-            foreach (var n in names)
-            {
-                if (predicate(n))
-                    result.Add(n);
-            }
-            return result;
-        }
-
-        private List<TSource> JoeyWhereDuplicate<TSource>(List<TSource> sources, Func<TSource, bool> predicate)
-        {
-            var result = new List<TSource>();
-            foreach (var p in sources)
-            {
-                if (predicate(p))
-                    result.Add(p);
-            }
-            return result;
-        }
+        //private List<string> JoeyWhere(List<string> names, Func<string, bool> predicate)
+        //{
+        //    var result = new List<string>();
+        //    foreach (var n in names)
+        //    {
+        //        if (predicate(n))
+        //            result.Add(n);
+        //    }
+        //    return result;
+        //}
     }
 }
