@@ -1,7 +1,9 @@
-﻿using Lab.Entities;
+﻿using System;
+using Lab.Entities;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 using System.Collections.Generic;
+using System.Linq;
 using ExpectedObjects;
 using Lab;
 
@@ -73,6 +75,16 @@ namespace CSharpAdvanceDesignTests
             var names = new List<string> {"Joey", "Cash", "William", "Sam", "Brian", "Jessica"};
             var actual = names.JoeyWhere(n => n.Length < 5);
             var expected = new[] {"Joey", "Cash", "Sam"};
+            expected.ToExpectedObject().ShouldMatch(actual);
+        }
+
+        
+        [Test]
+        public void find_odd_names()
+        {
+            var names = new List<string> {"Joey", "Cash", "William", "Sam", "Brian", "Jessica"};
+            var actual = names.JoeyWhere((n,i) => i % 2 == 0);
+            var expected = new[] {"Joey", "William", "Brian"};
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
