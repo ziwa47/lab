@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Lab.Entities;
 
 namespace Lab
 {
@@ -63,6 +64,33 @@ namespace Lab
             }
 
             //return result;
+        }
+
+        public static IEnumerable<TSource> JoeyTake<TSource>(this IEnumerable<TSource> employees, int takeCount)
+        {
+
+            var employeeEnumerator = employees.GetEnumerator();
+            var i = 0;
+            while (employeeEnumerator.MoveNext())
+            {
+                var item = employeeEnumerator.Current;
+                if (i++ < takeCount)
+                {
+                    yield return item;
+                }
+            }
+        }
+
+        public static IEnumerable<TSource> JoeySkip<TSource>(IEnumerable<TSource> employees, int skipCount)
+        {
+            var employeesEnumerator = employees.GetEnumerator();
+            var count = 0;
+            while (employeesEnumerator.MoveNext())
+            {
+                var item = employeesEnumerator.Current;
+                if (count++ >= skipCount)
+                    yield return item;
+            }
         }
     }
 }
