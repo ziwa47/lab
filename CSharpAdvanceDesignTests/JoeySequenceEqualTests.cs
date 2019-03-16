@@ -96,16 +96,16 @@ namespace CSharpAdvanceDesignTests
         }
 
 
-        [Test]
-        public void dict_add()
-        {
-            var dic = new Dictionary<Employee,int>(new MyEmployeeEqualComparer());
-            var a = new Employee() {FirstName = "Joey", LastName = "Chen", Phone = "123"};
-            var b = new Employee() {FirstName = "Joey", LastName = "Chen", Phone = "234"};
-            var c = new Employee() {FirstName = "123", LastName = "Chen", Phone = "123"};
-            dic.Add(a,1);
-            dic.Add(b,2);
-            dic.Add(c,3);
-        }
+        //[Test]
+        //public void dict_add()
+        //{
+        //    var dic = new Dictionary<Employee,int>(new MyEmployeeEqualComparer());
+        //    var a = new Employee() {FirstName = "Joey", LastName = "Chen", Phone = "123"};
+        //    var b = new Employee() {FirstName = "Joey", LastName = "Chen", Phone = "234"};
+        //    var c = new Employee() {FirstName = "123", LastName = "Chen", Phone = "123"};
+        //    dic.Add(a,1);
+        //    dic.Add(b,2);
+        //    dic.Add(c,3);
+        //}
     }
 }
