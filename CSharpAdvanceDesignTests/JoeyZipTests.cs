@@ -4,6 +4,7 @@ using Lab.Entities;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 using System.Collections.Generic;
+using Lab;
 
 namespace CSharpAdvanceDesignTests
 {
@@ -26,7 +27,7 @@ namespace CSharpAdvanceDesignTests
                 new Key() {Type = CardType.Benz, Owner = "Tom"},
             };
 
-            var pairs = JoeyZip(girls, keys, (girl, key) => $"{girl.Name}-{key.Owner}");
+            var pairs = girls.JoeyZip(keys, (girl, key) => $"{girl.Name}-{key.Owner}");
 
             var expected = new[]
             {
@@ -52,7 +53,7 @@ namespace CSharpAdvanceDesignTests
                 new Key() {Type = CardType.Benz, Owner = "Tom"},
             };
 
-            var pairs = JoeyZip(girls, keys, (girl, key) => $"{girl.Name}-{key.Type}");
+            var pairs = girls.JoeyZip(keys, (girl, key) => $"{girl.Name}-{key.Type}");
 
             var expected = new[]
             {
@@ -61,21 +62,6 @@ namespace CSharpAdvanceDesignTests
             };
 
             expected.ToExpectedObject().ShouldMatch(pairs);
-        }
-
-        private IEnumerable<TResult> JoeyZip<TSource1, TSource2, TResult>(IEnumerable<TSource1> source1,
-            IEnumerable<TSource2> source2,
-            Func<TSource1, TSource2, TResult> selector)
-        {
-            var source1Enumerator = source1.GetEnumerator();
-            var source2Enumerator = source2.GetEnumerator();
-
-            while (source1Enumerator.MoveNext() && source2Enumerator.MoveNext())
-            {
-                var t1 = source1Enumerator.Current;
-                var t2 = source2Enumerator.Current;
-                yield return selector(t1, t2);
-            }
         }
     }
 }

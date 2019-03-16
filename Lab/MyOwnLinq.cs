@@ -109,7 +109,7 @@ namespace Lab
                     yield break;
                 }
 
-                
+
             }
         }
 
@@ -133,8 +133,8 @@ namespace Lab
         public static TSource JoeyFirstOrDefault<TSource>(this IEnumerable<TSource> employees)
         {
             var enumerator = employees.GetEnumerator();
-            return enumerator.MoveNext() 
-                ? enumerator.Current 
+            return enumerator.MoveNext()
+                ? enumerator.Current
                 : default(TSource);
 
         }
@@ -162,6 +162,88 @@ namespace Lab
             //    stack.Push(enumerator.Current);
             //}
             //return stack;
+        }
+
+        public static IEnumerable<TResult> JoeyZip<TFirst, TSecond, TResult>(this IEnumerable<TFirst> first,
+            IEnumerable<TSecond> second,
+            Func<TFirst, TSecond, TResult> selector)
+        {
+            using (var firstEnumerator = first.GetEnumerator())
+            using (var secondEnumerator = second.GetEnumerator())
+
+                while (firstEnumerator.MoveNext() && secondEnumerator.MoveNext())
+                {
+                    var t1 = firstEnumerator.Current;
+                    var t2 = secondEnumerator.Current;
+                    yield return selector(t1, t2);
+                }
+        }
+
+        public static bool JoeySequenceEqual<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second)
+        {
+            return JoeySequenceEqual(first, second, EqualityComparer<TSource>.Default);
+        }
+
+        public static bool JoeySequenceEqual<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
+        {
+            var firstEnumerator = first.GetEnumerator();
+            var secondEnumerator = second.GetEnumerator();
+            while (true)
+            {
+                var firstFlag = firstEnumerator.MoveNext();
+                var secondFlag = secondEnumerator.MoveNext();
+
+                if (IsLengthDifferent(firstFlag, secondFlag))
+                    return false;
+
+                if (IsEnd(firstFlag))
+                    return true;
+
+                if (!IsValueEqual(comparer, firstEnumerator, secondEnumerator))
+                    return false;
+
+            }
+            //var isFirst = firstEnumerator.MoveNext();
+            //var isSecond = secondEnumerator.MoveNext();
+            //while (isFirst && isSecond)
+            //{
+            //    TSource f, s;
+
+            //    f = firstEnumerator.Current;
+            //    s = secondEnumerator.Current;
+            //    if (f.Equals(s) == false)
+            //        return false;
+
+            //    isFirst = firstEnumerator.MoveNext();
+            //    isSecond = secondEnumerator.MoveNext();
+
+            //    if (isFirst != isSecond)
+            //    {
+            //        return false;
+            //    }
+
+            //    f = firstEnumerator.Current;
+            //    s = secondEnumerator.Current;
+            //    if (f.Equals(s) == false)
+            //        return false;
+            //}
+
+            //return true;
+        }
+
+        private static bool IsValueEqual<TSource>(IEqualityComparer<TSource> comparer, IEnumerator<TSource> firstEnumerator, IEnumerator<TSource> secondEnumerator)
+        {
+            return comparer.Equals(firstEnumerator.Current,secondEnumerator.Current);
+        }
+
+        private static bool IsEnd(bool firstFlag)
+        {
+            return !firstFlag;
+        }
+
+        private static bool IsLengthDifferent(bool firstFlag, bool secondFlag)
+        {
+            return firstFlag != secondFlag;
         }
     }
 }
