@@ -2,6 +2,7 @@
 using Lab.Entities;
 using NUnit.Framework;
 using System.Collections.Generic;
+using Lab;
 
 namespace CSharpAdvanceDesignTests
 {
@@ -19,7 +20,7 @@ namespace CSharpAdvanceDesignTests
                 new Employee(){FirstName = "David",LastName = "Wang"},
             };
 
-            var actual = JoeyReverse(employees);
+            var actual = employees.JoeyReverse();
 
             var expected = new List<Employee>
             {
@@ -29,20 +30,6 @@ namespace CSharpAdvanceDesignTests
             };
 
             expected.ToExpectedObject().ShouldMatch(actual);
-        }
-
-        private IEnumerable<TSource> JoeyReverse<TSource>(IEnumerable<TSource> sources)
-        {
-            return new Stack<TSource>(sources);
-
-
-            //var enumerator = sources.GetEnumerator();
-            //var stack = new Stack<TSource>();
-            //while (enumerator.MoveNext())
-            //{
-            //    stack.Push(enumerator.Current);
-            //}
-            //return stack;
         }
     }
 }

@@ -149,5 +149,19 @@ namespace Lab
             }
             return last;
         }
+
+        public static IEnumerable<TSource> JoeyReverse<TSource>(this IEnumerable<TSource> sources)
+        {
+            return new Stack<TSource>(sources);
+
+
+            //var enumerator = sources.GetEnumerator();
+            //var stack = new Stack<TSource>();
+            //while (enumerator.MoveNext())
+            //{
+            //    stack.Push(enumerator.Current);
+            //}
+            //return stack;
+        }
     }
 }

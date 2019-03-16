@@ -17,7 +17,6 @@ namespace CSharpAdvanceDesignTests
             var employees = new List<Employee>();
 
             var actual = employees.JoeyFirstOrDefault();
-
             Assert.IsNull(actual);
         }
         [Test]
