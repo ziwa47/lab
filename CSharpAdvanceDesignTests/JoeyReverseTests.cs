@@ -31,16 +31,18 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<Employee> JoeyReverse(IEnumerable<Employee> employees)
+        private IEnumerable<TSource> JoeyReverse<TSource>(IEnumerable<TSource> sources)
         {
-            var enumerator = employees.GetEnumerator();
-            var stack = new Stack<Employee>();
-            while (enumerator.MoveNext())
-            {
-                stack.Push(enumerator.Current);
-            }
+            return new Stack<TSource>(sources);
 
-            return stack;
+
+            //var enumerator = sources.GetEnumerator();
+            //var stack = new Stack<TSource>();
+            //while (enumerator.MoveNext())
+            //{
+            //    stack.Push(enumerator.Current);
+            //}
+            //return stack;
         }
     }
 }
