@@ -23,7 +23,30 @@ namespace CSharpAdvanceDesignTests
 
         public int Compare(Employee element, Employee minElement)
         {
-            return KeyComparer.Compare(KeySelector(element),KeySelector(minElement));
+            return KeyComparer.Compare(KeySelector(element), KeySelector(minElement));
+        }
+    }
+
+    public class ComboComparer<TSource> : IComparer<TSource>
+    {
+        public ComboComparer(IComparer<TSource> firstComparer, IComparer<TSource> secondComparer)
+        {
+            FirstComparer = firstComparer;
+            SecondComparer = secondComparer;
+        }
+
+        private IComparer<TSource> FirstComparer { get; set; }
+        private IComparer<TSource> SecondComparer { get; set; }
+
+        public int Compare(TSource x, TSource y)
+        {
+            var firstCompare = FirstComparer.Compare(x, y);
+            if (firstCompare == 0)
+            {
+                return SecondComparer.Compare(x, y);
+
+            }
+            return firstCompare;
         }
     }
 
@@ -66,7 +89,7 @@ namespace CSharpAdvanceDesignTests
 
             var firstComparer = new CombineKeyComparer(element => element.LastName, Comparer<string>.Default);
             var secondComparer = new CombineKeyComparer(element => element.FirstName, Comparer<string>.Default);
-            var actual = JoeyOrderByLastName(employees, firstComparer, secondComparer);
+            var actual = JoeyOrderByLastName(employees, new ComboComparer<Employee>(firstComparer, secondComparer));
 
             var expected = new[]
             {
@@ -80,9 +103,7 @@ namespace CSharpAdvanceDesignTests
         }
 
         private IEnumerable<TSource> JoeyOrderByLastName<TSource>(
-            IEnumerable<TSource> employees,
-            IComparer<TSource> firstComparer,
-            IComparer<TSource> secondComparer)
+            IEnumerable<TSource> employees, ComboComparer<TSource> comboComparer)
         {
             //bubble sort
             var elements = employees.ToList();
@@ -93,21 +114,10 @@ namespace CSharpAdvanceDesignTests
                 for (int i = 1; i < elements.Count; i++)
                 {
                     var element = elements[i];
-                    var firstCompareResult = firstComparer.Compare(element, minElement);
-
-                    if (firstCompareResult < 0)
+                    if (comboComparer.Compare(element, minElement) < 0)
                     {
                         minElement = element;
                         index = i;
-                    }
-                    else if (firstCompareResult == 0)
-                    {
-                        var secondCompareResult = secondComparer.Compare(element, minElement);
-                        if (secondCompareResult < 0)
-                        {
-                            minElement = element;
-                            index = i;
-                        }
                     }
                 }
 
