@@ -91,7 +91,7 @@ namespace CSharpAdvanceDesignTests
                 new Employee(){FirstName = "Tom",LastName = "Li"},
                 new Employee(){FirstName = "David",LastName = "Wang"},
             };
-            var actual = first.JoeySequenceEqual(second,new MyEmployeeEqualComparer());
+            var actual = first.JoeySequenceEqual(second,new JoeyEqualityComparer());
             Assert.IsTrue(actual);
         }
 
@@ -107,5 +107,18 @@ namespace CSharpAdvanceDesignTests
         //    dic.Add(b,2);
         //    dic.Add(c,3);
         //}
+
+        internal class JoeyEqualityComparer : IEqualityComparer<Employee>
+        {
+            public bool Equals(Employee x, Employee y)
+            {
+                return x.LastName == y.LastName && x.FirstName == y.FirstName;
+            }
+
+            public int GetHashCode(Employee obj)
+            {
+                throw new System.NotImplementedException();
+            }
+        }
     }
 }
