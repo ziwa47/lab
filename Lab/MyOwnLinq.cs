@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Lab.Entities;
 
 namespace Lab
@@ -91,6 +92,42 @@ namespace Lab
                 if (count++ >= skipCount)
                     yield return item;
             }
+        }
+
+        public static IEnumerable<TSource> JoeyTakeWhile<TSource>(this IEnumerable<TSource> cards, Func<TSource, bool> predicate)
+        {
+            var cardsEnumerator = cards.GetEnumerator();
+            while (cardsEnumerator.MoveNext())
+            {
+                var card = cardsEnumerator.Current;
+                if (predicate(card))
+                {
+                    yield return card;
+                }
+                else
+                {
+                    yield break;
+                }
+
+                
+            }
+        }
+
+        public static bool IsEmpty<TSource>(this IEnumerable<TSource> sources)
+        {
+            return sources.Any() == false;
+        }
+
+        public static bool JoeyAny<TSource>(this IEnumerable<TSource> sources, Func<TSource, bool> predicate)
+        {
+            var source = sources.GetEnumerator();
+            while (source.MoveNext())
+            {
+                var e = source.Current;
+                if (predicate(e))
+                    return true;
+            }
+            return false;
         }
     }
 }

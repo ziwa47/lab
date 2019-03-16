@@ -141,7 +141,7 @@ namespace CSharpAdvanceDesignTests
             var actual = GroupSum(products, p => p.Id, 5);
             var expected = new[] { 15, 21 };
             expected.ToExpectedObject().ShouldMatch(actual);
-
+            
         }
 
 
