@@ -2,6 +2,8 @@
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 using System.Collections.Generic;
+using ExpectedObjects;
+using Lab;
 
 namespace CSharpAdvanceDesignTests
 {
@@ -13,13 +15,23 @@ namespace CSharpAdvanceDesignTests
         public void get_null_when_employees_is_empty()
         {
             var employees = new List<Employee>();
-            var actual = JoeyLastOrDefault(employees);
+            var actual = employees.JoeyLastOrDefault();
             Assert.IsNull(actual);
         }
 
-        private Employee JoeyLastOrDefault(IEnumerable<Employee> employees)
+        [Test]
+        public void get_last_employee()
         {
-            throw new System.NotImplementedException();
+            var employees = new List<Employee>()
+            {
+                new Employee(){FirstName = "Ziwa",LastName="i",Role = Role.Engineer},
+                new Employee(){FirstName = "Cash",LastName="i",Role = Role.Engineer},
+                new Employee(){FirstName = "Eason",LastName="i",Role = Role.Engineer},
+            };
+            var actual = employees.JoeyLastOrDefault();
+
+            var expected = new Employee() { FirstName = "Eason", LastName = "i", Role = Role.Engineer };
+            expected.ToExpectedObject().ShouldEqual(actual);
         }
     }
 }
