@@ -1,13 +1,27 @@
-﻿using System;
-using ExpectedObjects;
+﻿using ExpectedObjects;
+
 using Lab.Entities;
+
 using NUnit.Framework;
+
+using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 
 namespace CSharpAdvanceDesignTests
 {
+    public class CombineKeyComparer
+    {
+        public CombineKeyComparer(Func<Employee, string> keySelector, IComparer<string> keyComparer)
+        {
+            KeySelector = keySelector;
+            KeyComparer = keyComparer;
+        }
+
+        public Func<Employee, string> KeySelector { get; private set; }
+        public IComparer<string> KeyComparer { get; private set; }
+    }
+
     [TestFixture]
     public class JoeyOrderByTests
     {
@@ -45,7 +59,9 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joey", LastName = "Chen"},
             };
 
-            var actual = JoeyOrderByLastName(employees);
+            var firstComparer = new CombineKeyComparer(element => element.LastName, Comparer<string>.Default);
+            var secondComparer = new CombineKeyComparer(element => element.FirstName,Comparer<string>.Default);
+            var actual = JoeyOrderByLastName(employees, firstComparer, secondComparer);
 
             var expected = new[]
             {
@@ -58,11 +74,10 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-
-        private IEnumerable<Employee> JoeyOrderByLastName(IEnumerable<Employee> employees)
+        private IEnumerable<Employee> JoeyOrderByLastName(IEnumerable<Employee> employees,
+            CombineKeyComparer firstComparer, CombineKeyComparer secondComparer)
         {
             //bubble sort
-            var stringComparer = StringComparer.Create(CultureInfo.CurrentCulture, true);
             var elements = employees.ToList();
             while (elements.Any())
             {
@@ -70,20 +85,23 @@ namespace CSharpAdvanceDesignTests
                 var index = 0;
                 for (int i = 1; i < elements.Count; i++)
                 {
-                    var firstCompare = stringComparer.Compare(elements[i].LastName, minElement.LastName);
+                    var element = elements[i];
+                    var firstCompare = firstComparer.KeyComparer.Compare(firstComparer.KeySelector(element),
+                        firstComparer.KeySelector(minElement));
+
                     if (firstCompare < 0)
                     {
-                        minElement = elements[i];
+                        minElement = element;
                         index = i;
                     }
-                    else if (firstCompare == 0 
-                             && stringComparer.Compare(elements[i].FirstName, minElement.FirstName) < 0)
+                    else if (firstCompare == 0
+                             && secondComparer.KeyComparer.Compare(secondComparer.KeySelector(element),
+                                 secondComparer.KeySelector(minElement)) < 0)
                     {
-                        minElement = elements[i];
+                        minElement = element;
                         index = i;
                     }
                 }
-
 
                 elements.RemoveAt(index);
                 yield return minElement;
