@@ -7,7 +7,6 @@ using Lab;
 namespace CSharpAdvanceDesignTests
 {
     [TestFixture]
-    [Ignore("not yet")]
     public class JoeyReverseTests
     {
         [Test]
