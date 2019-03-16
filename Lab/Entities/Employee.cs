@@ -34,5 +34,6 @@ namespace Lab.Entities
         public string FirstName { get; set; }
         public Role Role { get; set; }
         public string Phone { get; set; }
+        public int Age { get; set; }
     }
 }
