@@ -79,10 +79,10 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<Employee> JoeyOrderByLastName(
-            IEnumerable<Employee> employees,
-            IComparer<Employee> firstComparer,
-            IComparer<Employee> secondComparer)
+        private IEnumerable<TSource> JoeyOrderByLastName<TSource>(
+            IEnumerable<TSource> employees,
+            IComparer<TSource> firstComparer,
+            IComparer<TSource> secondComparer)
         {
             //bubble sort
             var elements = employees.ToList();
