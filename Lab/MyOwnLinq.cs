@@ -289,5 +289,36 @@ namespace Lab
                 yield return minElement;
             }
         }
+
+        public static IEnumerable<TSource> JoeyDistinct<TSource>(this IEnumerable<TSource> source)
+        {
+            return source.JoeyDistinctWithEqualityComparer(EqualityComparer<TSource>.Default);
+            //return new HashSet<int>(source);
+            //var hashSet = new HashSet<TSource>();
+            //var enumerator = source.GetEnumerator();
+            //while (enumerator.MoveNext())
+            //{
+            //    var item = enumerator.Current;
+            //    if (hashSet.Add(item))
+            //    {
+            //        yield return item;
+            //    }
+            //}
+        }
+
+        public static IEnumerable<TSource> JoeyDistinctWithEqualityComparer<TSource>(this IEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
+        {
+            //return new HashSet<int>(source);
+            var hashSet = new HashSet<TSource>(comparer);
+            var enumerator = source.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                var item = enumerator.Current;
+                if (hashSet.Add(item))
+                {
+                    yield return item;
+                }
+            }
+        }
     }
 }
