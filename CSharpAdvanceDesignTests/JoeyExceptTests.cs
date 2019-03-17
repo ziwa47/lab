@@ -1,28 +1,36 @@
-﻿using ExpectedObjects;
+﻿using System;
+using ExpectedObjects;
 using NUnit.Framework;
 using System.Collections.Generic;
+using Lab;
 
 namespace CSharpAdvanceDesignTests
 {
     [TestFixture]
-    [Ignore("not yet")]
     public class JoeyExceptTests
     {
         [Test]
         public void except_numbers()
         {
-            var first = new[] { 1, 3, 5, 7 };
-            var second = new[] { 7, 1, 4 };
+            var first = new[] {1, 3, 5, 7, 3};
+            var second = new[] {7, 1, 4, 1};
 
-            var actual = JoeyExcept(first, second);
-            var expected = new[] { 3, 5 };
+            var actual = first.JoeyExcept(second);
+            var expected = new[] {3, 5};
 
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<int> JoeyExcept(IEnumerable<int> first, IEnumerable<int> second)
+
+        [Test]
+        public void skip_last_2()
         {
-            throw new System.NotImplementedException();
+            var numbers = new[] {10, 20, 30, 40, 50, 60,70};
+            var actual = numbers.JoeySkipLast(2);
+
+            var expected = new[] {10, 20, 30, 40,50};
+
+            expected.ToExpectedObject().ShouldMatch(actual);
         }
     }
 }

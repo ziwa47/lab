@@ -320,5 +320,74 @@ namespace Lab
                 }
             }
         }
+
+        public static IEnumerable<int> JoeyIntersect(this IEnumerable<int> first, IEnumerable<int> second)
+        {
+            var hashSec = new HashSet<int>(second);
+            var firstEnumerator = first.GetEnumerator();
+            while (firstEnumerator.MoveNext())
+            {
+                var firstEnumeratorCurrent = firstEnumerator.Current;
+                if (hashSec.Remove(firstEnumeratorCurrent))
+                    yield return firstEnumeratorCurrent;
+            }
+
+            //var hashFir = new HashSet<int>(first);
+            //var hashSec = new HashSet<int>(second);
+
+
+            //var firstEnumerator = hashFir.GetEnumerator();
+            //while (firstEnumerator.MoveNext())
+            //{
+            //    var firstEnumeratorCurrent = firstEnumerator.Current;
+            //    if (hashSec.Add(firstEnumeratorCurrent) == false)
+            //        yield return firstEnumeratorCurrent;
+            //}
+        }
+
+        public static IEnumerable<int> JoeyExcept(this IEnumerable<int> first, IEnumerable<int> second)
+        {
+            var hash = new HashSet<int>(second);
+            var firstEnumerator = first.GetEnumerator();
+            while (firstEnumerator.MoveNext())
+            {
+                var current = firstEnumerator.Current;
+                if (hash.Add(current))
+                {
+                    yield return current;
+                }
+            }
+        }
+
+        public static IEnumerable<int> JoeySkipLast(this IEnumerable<int> numbers, int count)
+        {
+            //var stack = new Stack<int>(numbers);
+
+            //for (int i = 0; i < count; i++)
+            //{
+            //    stack.Pop();
+            //}
+
+            //return new Stack<int>(stack);
+
+            //var queue = new Queue<int>(numbers);
+            //var queueCount = queue.Count;
+            //for (int i = 0; i < queueCount - count; i++)
+            //{
+            //    yield return queue.Dequeue();
+            //}
+
+            var queue = new Queue<int>();
+            var enumerator = numbers.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                var current = enumerator.Current;
+
+                if (queue.Count == count)
+                    yield return queue.Dequeue();
+
+                queue.Enqueue(current);
+            }
+        }
     }
 }
