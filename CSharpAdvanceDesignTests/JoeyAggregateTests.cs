@@ -2,6 +2,8 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using ExpectedObjects;
+using Lab.Entities;
 
 namespace CSharpAdvanceDesignTests
 {
@@ -20,15 +22,21 @@ namespace CSharpAdvanceDesignTests
 
             var actual = JoeyAggregate(drawlingList, balance, 
                 (draw, myBalance) => draw > myBalance ? myBalance : myBalance - draw, 
-                myBalance1 => myBalance1.ToString("0.00"));
+                myBalance1 => new Employee
+                {
+                    Saving = 10.91m
+                });
 
             //var expected = 10.91m;
-            var expected = "10.91";
+            var expected = new Employee
+            {p
+                Saving = 10.91m
+            };
 
-            Assert.AreEqual(expected, actual);
+           expected.ToExpectedObject().ShouldEqual(actual);
         }
 
-        private string JoeyAggregate(IEnumerable<int> drawlingList, decimal balance, Func<int, decimal, decimal> func, Func<decimal, string> resultSelector)
+        private TResut JoeyAggregate<TResut>(IEnumerable<int> drawlingList, decimal balance, Func<int, decimal, decimal> func, Func<decimal, TResut> resultSelector)
         {
             var drawEnumerator = drawlingList.GetEnumerator();
             var myBalance = balance;
