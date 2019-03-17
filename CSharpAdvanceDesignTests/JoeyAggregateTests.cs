@@ -29,7 +29,7 @@ namespace CSharpAdvanceDesignTests
 
             //var expected = 10.91m;
             var expected = new Employee
-            {p
+            {
                 Saving = 10.91m
             };
 
