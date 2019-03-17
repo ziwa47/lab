@@ -36,7 +36,7 @@ namespace CSharpAdvanceDesignTests
            expected.ToExpectedObject().ShouldEqual(actual);
         }
 
-        private TResut JoeyAggregate<TResut>(IEnumerable<int> drawlingList, decimal balance, Func<int, decimal, decimal> func, Func<decimal, TResut> resultSelector)
+        private static TResult JoeyAggregate<TResult>(IEnumerable<int> drawlingList, decimal balance, Func<int, decimal, decimal> func, Func<decimal, TResult> resultSelector)
         {
             var drawEnumerator = drawlingList.GetEnumerator();
             var myBalance = balance;
