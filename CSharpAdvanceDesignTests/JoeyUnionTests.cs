@@ -5,14 +5,13 @@ using System.Collections.Generic;
 namespace CSharpAdvanceDesignTests
 {
     [TestFixture]
-    [Ignore("not yet")]
     public class JoeyUnionTests
     {
         [Test]
         public void union_numbers()
         {
-            var first = new[] { 1, 3, 5 };
-            var second = new[] { 5, 3, 7 };
+            var first = new[] { 1, 3, 5 ,3,1};
+            var second = new[] { 5, 3, 7,7 };
 
             var actual = JoeyUnion(first, second);
             var expected = new[] { 1, 3, 5, 7 };
@@ -20,9 +19,32 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<int> JoeyUnion(IEnumerable<int> first, IEnumerable<int> second)
+        private static IEnumerable<int> JoeyUnion(IEnumerable<int> first, IEnumerable<int> second)
         {
-            throw new System.NotImplementedException();
+            return JoeyUnionWithComparer(first, second, EqualityComparer<int>.Default);
+        }
+        private static IEnumerable<TSource> 
+            JoeyUnionWithComparer<TSource>(IEnumerable<TSource> first, IEnumerable<TSource> second,IEqualityComparer<TSource> comparer)
+        {
+            
+            var hashSet = new HashSet<TSource>(comparer);
+            var firstEnumerator = first.GetEnumerator();
+            while (firstEnumerator.MoveNext())
+            {
+                var firstCurrent = firstEnumerator.Current;
+                if (hashSet.Add(firstCurrent))
+                    yield return firstCurrent;
+            }
+
+            var secondEnumerator = second.GetEnumerator();
+            while (secondEnumerator.MoveNext())
+            {
+                var secondEnumeratorCurrent = secondEnumerator.Current;
+                if (hashSet.Add(secondEnumeratorCurrent))
+                {
+                    yield return secondEnumeratorCurrent;
+                }
+            }
         }
     }
 }
